@@ -1,0 +1,33 @@
+{
+  "name": "ElasticElements example application",
+  "version": "0.0.1",
+  "private": true,
+  "authors": [
+    "David Flynt"
+  ],
+  "description": "Polymer app that shows how to use several Elastic Elements",
+  "keywords": [
+    "Elasticsearch",
+    "elastic",
+    "ElasticUI",
+    "web-component",
+    "polymer"
+  ],
+  "main": "elastic-search.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/ElasticElements/example-app",
+  "dependencies": {
+    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
+    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
+    "platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
+    "polymer": "Polymer/polymer#^1.5.0",
+    "elastic-client": "ElasticElements/elastic-client",
+    "elastic-search": "ElasticElements/elastic-search",
+    "elastic-match-query": "ElasticElements/elastic-match-query",
+    "elastic-sort": "ElasticElements/elastic-sort",
+    "type-selector": "ElasticElements/type-selector",
+    "elastic-aggregation": "ElasticElements/elastic-aggregation",
+    "elasticsearch": "#^11.0.0"
+  }
+}

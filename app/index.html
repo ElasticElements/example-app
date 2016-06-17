@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Polymer Starter Kit">
+  <title>Demo app for ElasticElements</title>
+
+  <!-- Place favicon.ico in the `app/` directory -->
+
+  <!-- Chrome for Android theme color -->
+  <meta name="theme-color" content="#2E3AA1">
+
+  <!-- Tile color for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="demo-app">
+
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild-->
+
+  <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- endbuild -->
+
+  <!-- Because this project uses vulcanize this should be your only html import
+       in this file. All other imports should go in elements.html -->
+  <link rel="import" href="elements/elements.html">
+
+  <!-- For shared styles, shared-styles.html import in elements.html -->
+  <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment"></style>
+  <style is="custom-style" include="shared-styles"></style>
+</head>
+
+<body unresolved>
+  <!-- build:remove -->
+  <span id="browser-sync-binding"></span>
+  <!-- endbuild -->
+
+  <template is="dom-bind" id="app">
+
+
+    <!--initialize new elastic client connection to server
+      esclient can be used throughout the application lifecycle -->
+    <elastic-client
+      config='{"host": "http://localhost:9200"}'
+      client="{{esclient}}"
+      cluster-status="{{clusterStatus}}">
+    </elastic-client>
+
+    <elastic-search
+      client="[[esclient]]"
+      index="mockads"
+      elastic-types="[[elasticTypes]]"
+      page="{{pageNum}}"
+      page-size="{{pageSize}}"
+      query="[[ejsQuery]]"
+      aggregations="{{esAggregations}}"
+      results="{{esResults}}"
+      last-error="{{error}}"
+      result-count="{{resultCount}}"
+      loading="{{loading}}">
+    </elastic-search>
+
+    <elastic-aggregation
+      ejs-agg-snippet="ejs.TermsAggregation('city_agg').field('city').size(10)"
+      all-results="[[esResults]]"
+      agg-results="{{cityAggResults}}"
+      aggregations="{{esAggregations}}"
+      >
+    </elastic-aggregation>
+
+    <elastic-aggregation
+      ejs-agg-snippet="ejs.TermsAggregation('eye_color_agg').field('eye_color').size(5)"
+      all-results="[[esResults]]"
+      agg-results="{{eyeColorAggResults}}"
+      aggregations="{{esAggregations}}"
+      >
+    </elastic-aggregation>
+    <paper-header-panel class="flex" mode="waterfall">
+
+      <!-- Search toolbar -->
+      <paper-toolbar>
+
+        <div class="horizontalgap" style="width:250px"></div>
+        <type-selector class="flex"
+          selected-type="{{selected}}"
+          available-types='[{"displayName":"ALL", "typeName":""}, 
+          {"displayName":"ad", "typeName":"ad"}]'
+          elastic-types="{{elasticTypes}}">
+        ></type-selector>
+        <div class="horizontalgap" style="width:10px"></div>        
+        <elastic-match-query class="flex-4"
+          field="_all"
+          query="{{ejsQuery}}"
+          label="Search"
+          autobuild="true"
+        >
+        </elastic-match-query>
+      </paper-toolbar>
+
+      <paper-drawer-panel>
+
+        <!-- Sidebar on left side -->
+        <paper-header-panel drawer>
+
+        </paper-header-panel>
+
+        <!-- Main content on right side -->
+        <paper-header-panel main>
+          <div><h3>query:</h3> {{toJSON(ejsQuery)}}</div>
+          <div><h3>count:</h3> {{toJSON(resultCount)}}</div>
+          <div><h3>status:</h3> {{clusterStatus}}</div>
+          <div><h3>results:</h3>{{toJSON(esResults)}}</div>
+          <div><h3>city_agg:</h3> {{toJSON(cityAggResults.buckets)}}</div>
+          <div><h3>eye_color_agg:</h3> {{toJSON(eyeColorAggResults.buckets)}}</div>
+        </paper-header-panel>
+
+      </paper-drawer-panel>
+
+    </paper-header-panel>
+
+  </template>
+  <script>
+      (function(document) {
+          var app = document.querySelector('#app');
+          app.toJSON = function(obj) {
+              return JSON.stringify(obj);
+          }
+      })(document);
+  </script>
+</body>
+
+</html>

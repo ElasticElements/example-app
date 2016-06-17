@@ -1,0 +1,1 @@
+import_test_data.sh will create a new index and populate with 5000 generated faux records.
